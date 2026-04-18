@@ -73,9 +73,9 @@ const Portfolio = () => {
         {/* Stats row */}
         <div className={`portfolio-stats ${visible ? 'visible' : ''}`}>
           {[
-            { icon: '<>', label: 'Total Projects', num: '2', sub: 'Innovative solutions crafted' },
+            { icon: '<>', label: 'Total Projects', num: '5', sub: 'Innovative solutions crafted' },
             { icon: '🏅', label: 'Certifications', num: '4', sub: 'Professional skills validated' },
-            { icon: '📄', label: 'Patent', num: '1', sub: 'Published recognition' },
+            { icon: '📄', label: 'Patent', num: '2', sub: 'Published recognition' },
           ].map((s, i) => (
             <div key={i} className="pstat-card card">
               <div className="pstat-top">

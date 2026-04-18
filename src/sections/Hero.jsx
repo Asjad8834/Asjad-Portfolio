@@ -35,7 +35,7 @@ const Hero = () => {
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-  const skills = ['React.js', 'Node.js', 'Java', 'MongoDB', 'PostgreSQL', 'TypeScript'];
+  const skills = ['React.js', 'Node.js', 'Java', 'MongoDB', 'DSA', 'Express.js'];
 
   return (
     <section id="home" className="hero">

@@ -79,6 +79,7 @@ const About = () => {
                 project <em>Sachi</em> — an AI-powered sound recognition app for
                 the hearing-impaired — even earned a{" "}
                 <strong>published patent</strong>.
+                <p>And So did another Project of mine for Cloud Computing---Objective to automatically select between servers and Vms and reduce the total energy consumed by the entire cloud platform</p>
               </p>
 
               <p className="bio-text">
