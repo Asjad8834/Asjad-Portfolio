@@ -106,7 +106,7 @@ const About = () => {
                   </svg>
                 </a>
                 <a
-                  href="/Asjad Iftakhar Resume_3.pdf"
+                  href="/Asjad Iftakhar Resume_3(new).pdf"
                   download
                   className="btn-primary"
                 >
