@@ -3,24 +3,44 @@ import "../styles/Portfolio.css";
 
 const projects = [
   {
+    name: 'Interview Practice AI',
+    desc: 'Full-stack platform that analyzes a resume against a job description and generates an interview report with the Gemini API, cutting manual prep time by about 40% across 43 test scenarios.',
+    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'Gemini API', 'Zod'],
+    badge: '🚀 Live',
+    badgeColor: 'cyan',
+    period: 'Aug 2026',
+    highlights: ['8 REST endpoints', 'PDF parsing', '30% fewer invalid AI responses (Zod)'],
+    link: 'https://interview-practice-ai-ten.vercel.app/',
+  },
+  {
+    name: 'Asjad Bank – Secure Banking Backend',
+    desc: 'Ledger-based banking backend that records every balance change. Fund transfers run atomically in MongoDB transactions with idempotency keys to prevent duplicate debits.',
+    tags: ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'JWT'],
+    badge: '🔐 Backend',
+    badgeColor: 'cyan',
+    period: 'Sep 2026',
+    highlights: ['Atomic transfers', 'Idempotency keys', 'JWT + OTP email verification', 'Rate limiting + RBAC'],
+    link: 'https://github.com/Asjad8834/Asjad-Bank',
+  },
+  {
     name: 'Sachi – Assistive Sound Recognition',
-    desc: 'AI-powered mobile app to assist hearing-impaired users by detecting and classifying environmental sounds in real time with 87% CNN accuracy. Patent Published.',
-    tags: ['Flutter', 'TensorFlow Lite', 'CNN', 'Machine Learning'],
+    desc: 'On-device mobile app for hearing-impaired users that classifies environmental sounds with a TensorFlow Lite CNN trained on a self-recorded dataset. Works fully offline.',
+    tags: ['Flutter', 'TensorFlow Lite', 'Python', 'CNN'],
     badge: '🏆 Patent Published',
     badgeColor: 'gold',
     period: 'Aug – Nov 2025',
-    highlights: ['87% CNN accuracy', '<50ms inference time', 'Visual + vibration alerts'],
-    link: null,
+    highlights: ['87% accuracy', 'Sub-50 ms inference', 'Visual + vibration alerts', '5 sound categories'],
+    link: null, // add GitHub URL
   },
   {
     name: 'CRM Software',
-    desc: 'Full-stack CRM system to manage contacts, track interactions, and optimize lead workflows with a real-time analytics dashboard.',
+    desc: 'Full-stack CRM to manage contacts, track interactions, and optimize lead workflows, with an analytics dashboard.',
     tags: ['React', 'Node.js', 'Express', 'MongoDB', 'Vercel', 'Render'],
     badge: '🚀 Live',
     badgeColor: 'cyan',
     period: 'Apr 2026',
-    highlights: ['REST APIs', 'Analytics Dashboard', 'Deployed on Vercel'],
-    link: "https://crm-software-plum.vercel.app/",
+    highlights: ['REST APIs', 'Analytics dashboard', 'Deployed on Vercel'],
+    link: 'https://crm-software-plum.vercel.app/',
   },
 ];
 
@@ -73,7 +93,7 @@ const Portfolio = () => {
         {/* Stats row */}
         <div className={`portfolio-stats ${visible ? 'visible' : ''}`}>
           {[
-            { icon: '<>', label: 'Total Projects', num: '5', sub: 'Innovative solutions crafted' },
+            { icon: '<>', label: 'Total Projects', num: '5+', sub: 'Innovative solutions crafted' },
             { icon: '🏅', label: 'Certifications', num: '4', sub: 'Professional skills validated' },
             { icon: '📄', label: 'Patent', num: '2', sub: 'Published recognition' },
           ].map((s, i) => (

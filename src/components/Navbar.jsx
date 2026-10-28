@@ -40,7 +40,7 @@ const Navbar = ({ activeSection, scrolled }) => {
         </ul>
 
         <a
-          href="mailto:ammarzain8834@gmail.com"
+          href="mailto:asjadiftakhar8834@gmail.com"
           className="nav-cta"
         >
           <span>Mail Me</span>

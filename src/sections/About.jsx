@@ -4,7 +4,7 @@ import "../styles/About.css";
 const stats = [
   {
     icon: "⚡",
-    num: "2+",
+    num: "4+",
     label: "Projects Live",
     sub: "Deployed & production-ready",
   },
@@ -17,7 +17,7 @@ const stats = [
   {
     icon: "📅",
     num: "2026",
-    label: "Graduating",
+    label: "Graduated",
     sub: "VIT Vellore — B.Tech CS",
   },
   {
@@ -67,30 +67,38 @@ const About = () => {
               </div>
 
               <p className="bio-text">
-                Hello! I'm <strong>Asjad Iftakhar</strong>, a Computer Science
-                student at VIT Vellore (graduating 2026), passionate about
-                building smart, scalable web & mobile applications.
+                  Hi, I'm <strong>Asjad Iftakhar</strong>, a full-stack software engineer
+                  based in Bengaluru. I graduated in Computer Science from{" "}
+                  <strong>VIT Vellore</strong> in 2026 and I focus on backend systems:
+                  REST APIs, secure authentication and databases, with React on the front end.
               </p>
 
               <p className="bio-text">
-                I've gained hands-on experience as a{" "}
-                <strong>MERN Stack Developer Intern at Ethnus</strong>, building
-                responsive full-stack apps and integrating RESTful APIs. My
-                project <em>Sachi</em> — an AI-powered sound recognition app for
-                the hearing-impaired — even earned a{" "}
-                <strong>published patent</strong>.
-                <p>And So did another Project of mine for Cloud Computing---Objective to automatically select between servers and Vms and reduce the total energy consumed by the entire cloud platform</p>
+                  I've completed two internships. At <strong>NepByte Technologies</strong> I
+                  built 14 REST API endpoints and cut response time by about 100 ms. At{" "}
+                  <strong>Ethnus</strong> I delivered 5 MERN modules in 6 Agile sprints.
+                  Right now I'm building <em>Asjad Bank</em>, an idempotent, ledger-based
+                  banking backend with atomic transfers, and <em>Interview Practice AI</em>,
+                  a Gemini-powered tool that turns a resume and job description into an
+                  interview report.
+                </p>
+
+              <p className="bio-text">
+                  Two of my projects earned <strong>published patents</strong>.{" "}
+                  <em>Sachi</em> is an on-device sound recognition app for the
+                  hearing-impaired, with 87% accuracy and sub-50 ms inference. My cloud
+                  computing project automatically selects between servers and VMs to reduce
+                  the total energy consumed by the entire cloud platform.
               </p>
 
               <p className="bio-text">
-                My goal is to transition into a software engineering role
-                focused on building efficient, real-world products, eventually
-                moving toward AI and data science.
+                I'm looking for a Software Engineer / SDE role where I can build reliable,
+                scalable products with a strong engineering team.
               </p>
 
               <div className="bio-links">
                 <a
-                  href="mailto:ammarzain8834@gmail.com"
+                  href="mailto:asjadiftakhar8834@gmail.com"
                   className="btn-primary"
                 >
                   <span>Get in Touch</span>
@@ -106,7 +114,7 @@ const About = () => {
                   </svg>
                 </a>
                 <a
-                  href="/Asjad Iftakhar Resume_3(new).pdf"
+                  href="/Asjad Iftakhar Resume.pdf"
                   download
                   className="btn-primary"
                 >
@@ -125,7 +133,7 @@ const About = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://linkedin.com/in/asjadiftakhar"
+                  href="https://www.linkedin.com/in/asjadiftakhar/"
                   target="_blank"
                   rel="noreferrer"
                   className="btn-outline"

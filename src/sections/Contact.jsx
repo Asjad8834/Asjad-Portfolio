@@ -12,7 +12,7 @@ const Contact = () => {
     // Opens mail client with pre-filled content
     const subject = encodeURIComponent(`Portfolio Contact from ${form.name}`);
     const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`);
-    window.open(`mailto:ammarzain8834@gmail.com?subject=${subject}&body=${body}`);
+    window.open(`mailto:asjadiftakhar8834@gmail.com?subject=${subject}&body=${body}`);
     setSent(true);
     setTimeout(() => setSent(false), 4000);
   };
@@ -38,8 +38,8 @@ const Contact = () => {
     },
     {
       label: 'Email',
-      sub: 'ammarzain8834@gmail.com',
-      href: 'mailto:ammarzain8834@gmail.com',
+      sub: 'asjadiftakhar8834@gmail.com',
+      href: 'mailto:asjadiftakhar8834@gmail.com',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       ),
