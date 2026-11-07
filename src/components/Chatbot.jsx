@@ -1,80 +1,122 @@
-import React, { useState } from 'react';
+
+import React, { useState } from "react";
 import "../styles/Chatbot.css";
 
 function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
+
   const [messages, setMessages] = useState([
     {
-      role: 'bot',
+      role: "bot",
       content:
-        "Hi! 👋 I'm Asjad's portfolio assistant. Ask me anything about Asjad's skills, projects, experience, education, or background and i will answer right away.",
+        "Hi! 👋 I'm Asjad's portfolio assistant. Ask me anything about Asjad's skills, projects, experience, education, or background and I will answer right away.",
     },
   ]);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const sendMessage = async () => {
-    if (!message.trim() || isLoading) return;
-
     const userMessage = message.trim();
 
-    // Add user's message to the chat
+    // Don't send empty messages or another request while loading
+    if (!userMessage || isLoading) {
+      return;
+    }
+
+    // Add user's message
     setMessages((prev) => [
       ...prev,
       {
-        role: 'user',
+        role: "user",
         content: userMessage,
       },
     ]);
 
-    setMessage('');
+    // Clear input
+    setMessage("");
+
+    // Start loading
     setIsLoading(true);
 
+    // Stop request after 20 seconds
+    const controller = new AbortController();
+
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, 20000);
+
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
+      const response = await fetch("/api/chat", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           message: userMessage,
         }),
+        signal: controller.signal,
       });
 
-      const data = await response.json();
+      let data;
+
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error("Invalid response from server.");
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong');
+        throw new Error(
+          data?.error || "AI service temporarily unavailable."
+        );
+      }
+
+      if (
+        !data ||
+        typeof data.reply !== "string" ||
+        data.reply.trim() === ""
+      ) {
+        throw new Error("The AI returned an empty response.");
       }
 
       // Add AI response
+      // IMPORTANT: keep role as "bot" because your existing
+      // Chatbot.css styles the bot messages using .bot
       setMessages((prev) => [
         ...prev,
         {
-          role: 'bot',
+          role: "bot",
           content: data.reply,
         },
       ]);
-
     } catch (error) {
-      console.error('Chat error:', error);
+      console.error("Chat error:", error);
+
+      let errorMessage =
+        "Sorry, I couldn't process that request right now.";
+
+      if (error.name === "AbortError") {
+        errorMessage =
+          "The AI service took too long to respond. Please try again.";
+      }
 
       setMessages((prev) => [
         ...prev,
         {
-          role: 'bot',
-          content:
-            "Sorry, I couldn't process that request right now.",
+          role: "bot",
+          content: errorMessage,
         },
       ]);
-
     } finally {
+      clearTimeout(timeoutId);
       setIsLoading(false);
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
       sendMessage();
     }
   };
@@ -85,10 +127,10 @@ function Chatbot() {
       {/* Floating Button */}
       <button
         className="chatbot-button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Open chatbot"
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-label={isOpen ? "Close chatbot" : "Open chatbot"}
       >
-        {isOpen ? '×' : '💬'}
+        {isOpen ? "×" : "💬"}
       </button>
 
       {/* Chat Window */}
@@ -115,6 +157,7 @@ function Chatbot() {
               </div>
             ))}
 
+            {/* Loading */}
             {isLoading && (
               <div className="chatbot-message bot">
                 Thinking...
@@ -129,7 +172,7 @@ function Chatbot() {
             <input
               type="text"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(event) => setMessage(event.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask something about Asjad..."
               disabled={isLoading}
@@ -139,7 +182,7 @@ function Chatbot() {
               onClick={sendMessage}
               disabled={isLoading || !message.trim()}
             >
-              Send
+              {isLoading ? "..." : "Send"}
             </button>
 
           </div>
