@@ -1,0 +1,142 @@
+.chatbot {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+}
+
+/* Floating Button */
+
+.chatbot-button {
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background: #111;
+  color: rgb(233, 230, 230);
+  font-size: 24px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+
+  transition: transform 0.2s ease;
+}
+
+.chatbot-button:hover {
+  transform: scale(1.08);
+}
+
+/* Chat Window */
+
+.chatbot-window {
+  position: absolute;
+  bottom: 75px;
+  right: 0;
+
+  width: 350px;
+  height: 500px;
+
+  background: rgb(255, 255, 255);
+  border-radius: 16px;
+
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+
+.chatbot-header {
+  padding: 18px 20px;
+  background: #111;
+  color: white;
+}
+
+.chatbot-header h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.chatbot-header span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Messages */
+
+.chatbot-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #f7f7f7;
+}
+
+.chatbot-message {
+  max-width: 85%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.chatbot-message.bot {
+  background: white;
+  color: #222;
+  border: 1px solid #eee;
+}
+
+.chatbot-message.user {
+  margin-left: auto;
+  background: #111;
+  color: white;
+}
+
+/* Input */
+
+.chatbot-input-area {
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid #eee;
+  background: white;
+}
+
+.chatbot-input-area input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  outline: none;
+}
+
+.chatbot-input-area button {
+  margin-left: 8px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 8px;
+  background: #111;
+  color: white;
+}
+
+/* Mobile */
+
+@media (max-width: 500px) {
+  .chatbot {
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .chatbot-window {
+    width: calc(100vw - 30px);
+    height: 70vh;
+    right: 0;
+  }
+}

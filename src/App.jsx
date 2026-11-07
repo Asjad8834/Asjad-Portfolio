@@ -5,6 +5,7 @@ import About from './sections/About';
 import Portfolio from './sections/Portfolio';
 import Contact from './sections/Contact';
 import Footer from './components/Footer';
+import Chatbot from './components/Chatbot';
 //import CustomCursor from './components/CustomCursor';
 import './App.css';
 
@@ -42,6 +43,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <Chatbot />
     </div>
   );
 }
