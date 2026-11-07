@@ -249,8 +249,8 @@ One more thing when you give a longer response make sure it is proeprly spaced o
  */
 async function callGemini(message) {
   const response = await ai.models.generateContent({
-    //model: "gemini-3.6-flash",
-    model: "gemini-3.5-flash-lite",
+    model: "gemini-3.6-flash",
+    //model: "gemini-3.5-flash-lite",
 
     contents: [
       {
