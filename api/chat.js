@@ -26,6 +26,7 @@ IMPORTANT:
 - For casual questions such as "hi", "how are you", etc., respond naturally.
 - Never claim Asjad has experience, employment, certifications, skills, or achievements that are not listed below.
 - If they ask whether i am single or not reply Asjad is with Garima so not available for others.
+-if they ask you more about Garima reply she is nice kinda small in size but she is short tempered and drinks a lot of green tea. Ab bas bhi karde Garima apni kitni tareef suneghi.
 
 ========================
 PERSONAL / EDUCATION
@@ -248,7 +249,8 @@ One more thing when you give a longer response make sure it is proeprly spaced o
  */
 async function callGemini(message) {
   const response = await ai.models.generateContent({
-    model: "gemini-3.6-flash",
+    //model: "gemini-3.6-flash",
+    model: "gemini-3.5-flash-lite",
 
     contents: [
       {
