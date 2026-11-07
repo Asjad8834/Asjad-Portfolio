@@ -97,15 +97,13 @@ export default async function handler(req, res) {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error("Gemini API error:", {
-          status: response.status,
-          message: data?.error?.message,
-        });
+          console.error("GEMINI_STATUS:", response.status);
+          console.error("GEMINI_ERROR:", JSON.stringify(data));
 
-        return res.status(502).json({
-          error: "AI service temporarily unavailable",
-        });
-      }
+          return res.status(response.status).json({
+            error: data?.error?.message || "Gemini API request failed",
+          });
+        }
 
       const reply =
         data?.candidates?.[0]?.content?.parts?.[0]?.text;
