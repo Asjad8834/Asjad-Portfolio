@@ -7,7 +7,6 @@ import Contact from './sections/Contact';
 import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
 //import CustomCursor from './components/CustomCursor';
-import HireMeGame from "./components/HireMeGame";
 import ReactiveCompanion from "./components/ReactiveCompanion/ReactiveCompanion";
 import './App.css';
 
@@ -46,7 +45,6 @@ function App() {
       </main>
       <Footer />
       <Chatbot />
-      <HireMeGame />
     </div>
   );
 }

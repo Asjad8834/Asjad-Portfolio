@@ -75,6 +75,7 @@ section {
   overflow: hidden;
 }
 
+/* ---- CONTAINER ---- */
 .container {
   max-width: 1200px;
   margin: 0 auto;
