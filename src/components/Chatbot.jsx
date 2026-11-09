@@ -1,11 +1,11 @@
-
 import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "../styles/Chatbot.css";
 
 function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-
   const [messages, setMessages] = useState([
     {
       role: "bot",
@@ -19,12 +19,10 @@ function Chatbot() {
   const sendMessage = async () => {
     const userMessage = message.trim();
 
-    // Don't send empty messages or another request while loading
     if (!userMessage || isLoading) {
       return;
     }
 
-    // Add user's message
     setMessages((prev) => [
       ...prev,
       {
@@ -33,18 +31,14 @@ function Chatbot() {
       },
     ]);
 
-    // Clear input
     setMessage("");
-
-    // Start loading
     setIsLoading(true);
 
-    // Stop request after 20 seconds
     const controller = new AbortController();
 
     const timeoutId = setTimeout(() => {
       controller.abort();
-    }, 20000);
+    }, 60000);
 
     try {
       const response = await fetch("/api/chat", {
@@ -80,9 +74,6 @@ function Chatbot() {
         throw new Error("The AI returned an empty response.");
       }
 
-      // Add AI response
-      // IMPORTANT: keep role as "bot" because your existing
-      // Chatbot.css styles the bot messages using .bot
       setMessages((prev) => [
         ...prev,
         {
@@ -124,7 +115,7 @@ function Chatbot() {
   return (
     <div className="chatbot">
 
-      {/* Floating Button */}
+      {/* Floating button */}
       <button
         className="chatbot-button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -133,7 +124,8 @@ function Chatbot() {
         {isOpen ? "×" : "💬"}
       </button>
 
-      {/* Chat Window */}
+
+      {/* Chat window */}
       {isOpen && (
         <div className="chatbot-window">
 
@@ -145,6 +137,7 @@ function Chatbot() {
             </div>
           </div>
 
+
           {/* Messages */}
           <div className="chatbot-messages">
 
@@ -153,18 +146,30 @@ function Chatbot() {
                 key={index}
                 className={`chatbot-message ${msg.role}`}
               >
-                {msg.content}
+                {msg.role === "bot" ? (
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
+                ) : (
+                  msg.content
+                )}
               </div>
             ))}
 
-            {/* Loading */}
+
+            {/* Loading state */}
             {isLoading && (
-              <div className="chatbot-message bot">
-                Thinking...
-              </div>
-            )}
+                <div className="chatbot-message bot chatbot-thinking">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              )}
 
           </div>
+
 
           {/* Input */}
           <div className="chatbot-input-area">
@@ -176,6 +181,7 @@ function Chatbot() {
               onKeyDown={handleKeyDown}
               placeholder="Ask something about Asjad..."
               disabled={isLoading}
+              maxLength={1000}
             />
 
             <button
@@ -189,6 +195,7 @@ function Chatbot() {
 
         </div>
       )}
+
     </div>
   );
 }

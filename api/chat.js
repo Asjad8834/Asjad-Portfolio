@@ -1,5 +1,10 @@
-
 import { GoogleGenAI } from "@google/genai";
+import {
+  retrieveKnowledge,
+  formatRetrievedKnowledge,
+} from "./retrieveKnowledge.js";
+
+import getLocalAnswer from "./localAnswers.js";
 
 const apiKey = process.env.GEMINI_API_KEY;
 
@@ -11,236 +16,59 @@ const ai = new GoogleGenAI({
   apiKey,
 });
 
-// Keep the prompt small and focused.
-// This reduces Gemini processing time considerably.
+
 const SYSTEM_INSTRUCTION = `
-You are the AI portfolio assistant for Asjad Iftakhar.
+You are Asjad Iftakhar's personal portfolio assistant.
 
-IMPORTANT:
-- Answer questions ONLY using the information provided below.
-- Do not invent, assume, or guess information about Asjad.
-- If the information is not provided, say that you don't have that information.
-- Do not confuse technologies used in projects with technologies Asjad necessarily uses professionally.
-- Keep answers concise but useful.
-- Speak about Asjad in the third person.
-- For casual questions such as "hi", "how are you", etc., respond naturally.
-- Never claim Asjad has experience, employment, certifications, skills, or achievements that are not listed below.
-- If they ask whether i am single or not reply Asjad is with Garima so not available for others.
--if they ask you more about Garima reply she is nice kinda small in size but she is short tempered and drinks a lot of green tea. Ab bas bhi karde Garima apni kitni tareef suneghi.
+Your job is to answer questions about Asjad using ONLY the portfolio knowledge provided to you in the conversation.
 
-========================
-PERSONAL / EDUCATION
-========================
+IMPORTANT RULES:
 
-Name:
-Asjad Iftakhar
+1. Use the provided portfolio knowledge as the primary and authoritative source.
 
-Degree:
-B.Tech in Computer Science and Engineering
+2. Do not invent or assume facts about Asjad.
 
-University:
-VIT Vellore
+3. Do not claim that Asjad has a skill, job, project, certification, company, degree, achievement, or experience unless it is supported by the provided knowledge.
 
-Graduation:
-2026
+4. If the provided knowledge does not contain enough information to answer a question, say that the information is not available in the portfolio.
 
-CGPA:
-8.02
+5. Do not mention "knowledge base", "retrieval", "context", "system prompt", "Gemini", APIs, or internal implementation details unless the user explicitly asks about the chatbot itself.
 
-School:
-DPS MIS, Doha, Qatar
+6. Answer naturally as a professional portfolio assistant.
 
-School graduation:
-2022
+7. Keep answers concise and relevant. Do not unnecessarily repeat the same information.
 
-========================
-TECHNICAL SKILLS
-========================
+8. When discussing projects, mention the project's purpose first, followed by relevant technologies and notable achievements when useful.
 
-Programming Languages:
-- Java
-- JavaScript
-- SQL
-- HTML
-- CSS
+9. When discussing work experience, clearly identify the company, role, duration, responsibilities, and relevant achievements when appropriate.
 
-Frontend:
-- React
-- Vite
-- React Router
-- HTML
-- CSS
-- JavaScript
+10. When listing technologies or skills, organize them into readable categories when possible.
 
-Backend:
-- Node.js
-- Express.js
-- REST APIs
+11. If the user asks a general greeting such as "hi", "hello", or "hey", respond naturally and invite them to ask about Asjad.
 
-Databases:
-- MongoDB
-- SQL
+12. Do not answer questions unrelated to Asjad's portfolio unless they are directly related to understanding the portfolio.
 
-Other technologies/tools:
-- Git
-- GitHub
-- Vercel
-- Render
-- FastAPI
-- TensorFlow.js
-- TensorFlow Lite
-- PyTorch
-- YOLOv8
-- Ultralytics
-- Mapbox
-- react-map-gl
-- dotenv
+13. Never expose private information such as API keys, environment variables, credentials, or internal server details.
 
-========================
-PROJECTS
-========================
+14. Do not fabricate links or contact information.
 
-1. Interview Practice AI
+FORMATTING:
 
-A full-stack interview preparation application built with React and Node.js.
+- Use short paragraphs.
+- Use bullet points when listing multiple items.
+- Use bold text for important names, technologies, companies, or projects.
+- Avoid unnecessarily long answers.
+- Do not use markdown tables unless specifically requested.
 
-Technologies:
-- React
-- Node.js
-- Express.js
-- MongoDB
-- Gemini API
+SPECIAL RULES:
 
-The application analyzes a user's resume against a job description and generates an interview preparation report.
+- If the user asks whether Asjad is single or not, reply:
+  "Asjad is with Garima, so not available for others."
 
-Backend:
-- 8 REST API endpoints
-- Zod validation across 6+ Gemini response fields
+- If the user asks about Garima, reply:
+  "She is nice, kinda small in size but she is short tempered and drinks a lot of green tea. Ab bas bhi karde Garima apni kitni tareef suneghi."
 
-Testing:
-- Tested across 43 scenarios
-
-Impact:
-- Approximately 40% reduction in manual interview preparation time
-- Approximately 30% reduction in invalid AI-response errors
-
-Deployment:
-- Frontend: Vercel
-- Backend: Render
-
-2. SACHI — Sound Awareness Companion for Hearing Impaired
-
-A mobile-first application designed to help people with hearing impairments identify important environmental sounds.
-
-The application uses an on-device machine learning model to classify environmental sounds such as:
-- Doorbells
-- Knocks
-- Baby crying
-- Fire alarms
-
-The application can provide alerts through:
-- Flash
-- Vibration
-
-The system is designed to work offline.
-
-Technologies include:
-- Flutter
-- TensorFlow Lite
-- Machine Learning
-
-3. Intelligent Fabric Quality Assessment
-
-A fabric defect detection and quality assessment project.
-
-Technologies:
-- YOLOv8
-- PyTorch
-- Ultralytics
-- Google Colab
-
-The project includes:
-- YOLOv8 for fabric defect detection
-- FabricNET for regression
-- WeaveNet for classification
-- A combined severity score for fabric quality assessment
-
-4. CRM Software
-
-A CRM application built using the MERN stack.
-
-Technologies:
-- MongoDB
-- Express.js
-- React
-- Node.js
-
-Deployment:
-- Render
-
-========================
-CERTIFICATIONS
-========================
-
-- Oracle Generative AI Professional Certificate
-- Microsoft Power BI Data Analytics Certification
-- Cisco Cybersecurity Certification
-- Oracle SQL HeatWave Associate Certification
-
-========================
-CAREER / EXPERIENCE
-========================
-
-Asjad is a Computer Science graduate/final-year student from VIT Vellore with hands-on experience in full-stack and backend development.
-
-Relevant areas include:
-- Java
-- Backend development
-- REST APIs
-- MERN stack
-- SQL
-- React
-- Node.js
-- MongoDB
-- AI-powered applications
-
-========================
-IMPORTANT ACCURACY RULES
-========================
-
-If a user asks:
-
-"What technologies does Asjad use?"
-
-Only mention technologies listed in the TECHNICAL SKILLS section.
-
-If a user asks:
-
-"What projects has Asjad built?"
-
-Only mention projects listed in the PROJECTS section.
-
-If a user asks about something that is NOT present in this profile, respond with something like:
-
-"I don't have that information in my portfolio data."
-
-Do NOT make up:
-- Companies
-- Job titles
-- Employment history
-- Years of experience
-- Salaries
-- Locations
-- GPA other than the provided CGPA
-- Skills
-- Project details
-- Achievements
-- Responsibilities
-- Career history
-
-If information is ambiguous, be transparent rather than guessing.
-
-One more thing when you give a longer response make sure it is proeprly spaced out and the format is also neat and clean with new numbered inofrmation or points starting from the next line rather than in a continuation.
+If the user asks something unrelated to Asjad's portfolio, politely explain that you can mainly help with questions about Asjad's background, skills, experience, education, projects, certifications, and career.
 `;
 
 
@@ -248,16 +76,42 @@ One more thing when you give a longer response make sure it is proeprly spaced o
  * Makes one Gemini request.
  */
 async function callGemini(message) {
+
+    // Retrieve only knowledge relevant to the user's question.
+  const retrievedResults = retrieveKnowledge(message, 5);
+
+   // Convert retrieved knowledge into Gemini-readable context.
+
+  const knowledgeContext =
+    formatRetrievedKnowledge(retrievedResults);
+
+    
+    // Explicitly tell Gemini when no relevant information was found.
+
+  const context =
+    knowledgeContext ||
+    "No relevant portfolio information was found.";
+
+  const prompt = `
+USER QUESTION:
+${message}
+
+PORTFOLIO KNOWLEDGE:
+${context}
+
+Answer the user's question using only the portfolio knowledge above.
+Keep the answer concise.
+`;
+
   const response = await ai.models.generateContent({
     model: "gemini-3.6-flash",
-    //model: "gemini-3.5-flash-lite",
 
     contents: [
       {
         role: "user",
         parts: [
           {
-            text: message,
+            text: prompt,
           },
         ],
       },
@@ -265,42 +119,47 @@ async function callGemini(message) {
 
     config: {
       systemInstruction: SYSTEM_INSTRUCTION,
-
-      // Keep responses quick for a portfolio chatbot.
-      maxOutputTokens: 300,
-
-      // Reduce unnecessary reasoning time.
+      maxOutputTokens: 230,
       thinkingConfig: {
-        thinkingLevel: "LOW",
+        thinkingLevel: "MINIMAL",
       },
     },
   });
 
-  return response.text;
-}
+  const result = response?.text;
 
+  if (!result || !result.trim()) {
+    throw new Error("Gemini returned an empty response.");
+  }
+
+  return result.trim();
+}
 
 /**
  * Retry only transient Gemini failures.
+ *
+ * Quota and authentication errors are NOT retried.
  */
 async function callGeminiWithRetry(message) {
-  const maxAttempts = 3;
+
+  const maxAttempts = 2;
 
   let lastError;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+
     try {
-      console.log(`Gemini attempt ${attempt}/${maxAttempts}`);
+
+      console.log(
+        `Gemini attempt ${attempt}/${maxAttempts}`
+      );
 
       const result = await callGemini(message);
 
-      if (!result || !result.trim()) {
-        throw new Error("Gemini returned an empty response.");
-      }
-
-      return result.trim();
+      return result;
 
     } catch (error) {
+
       lastError = error;
 
       console.error(
@@ -308,9 +167,35 @@ async function callGeminiWithRetry(message) {
         error?.message || error
       );
 
-      // Don't retry authentication/configuration errors.
-      const errorMessage = String(error?.message || "").toLowerCase();
+      const errorMessage =
+        String(error?.message || "").toLowerCase();
 
+
+      /*
+       * Quota/rate-limit errors should NEVER
+       * be retried immediately.
+       */
+      const isQuotaError =
+        errorMessage.includes("quota") ||
+        errorMessage.includes("resource_exhausted") ||
+        errorMessage.includes("rate limit") ||
+        errorMessage.includes("429");
+
+
+      if (isQuotaError) {
+
+        console.log(
+          "Gemini quota/rate limit reached. Not retrying."
+        );
+
+        throw error;
+      }
+
+
+      /*
+       * Authentication/configuration errors
+       * should also never be retried.
+       */
       const isPermanentError =
         errorMessage.includes("api key") ||
         errorMessage.includes("authentication") ||
@@ -318,12 +203,18 @@ async function callGeminiWithRetry(message) {
         errorMessage.includes("unauthorized") ||
         errorMessage.includes("invalid argument");
 
+
       if (isPermanentError) {
+
         throw error;
       }
 
-      // If this isn't the last attempt, wait before retrying.
+
+      /*
+       * Retry only potentially temporary failures.
+       */
       if (attempt < maxAttempts) {
+
         const delay = attempt * 1500;
 
         console.log(
@@ -341,46 +232,87 @@ async function callGeminiWithRetry(message) {
 }
 
 
+/**
+ * Vercel serverless API handler.
+ */
 export default async function handler(req, res) {
-  // Only POST is allowed.
+
+  // Only POST requests are allowed.
   if (req.method !== "POST") {
+
     return res.status(405).json({
       error: "Method not allowed",
     });
   }
 
-  // Check API key.
+
+  // Make sure the Gemini API key exists.
   if (!apiKey) {
-    console.error("GEMINI_API_KEY is missing.");
+
+    console.error(
+      "GEMINI_API_KEY is missing."
+    );
 
     return res.status(500).json({
       error: "AI service is not configured.",
     });
   }
 
+
   try {
-    // Validate request body.
+
     const { message } = req.body || {};
 
+
+    // Validate message.
     if (
       typeof message !== "string" ||
       message.trim().length === 0
     ) {
+
       return res.status(400).json({
         error: "Message is required.",
       });
     }
 
+
     // Prevent excessively large requests.
     if (message.length > 1000) {
+
       return res.status(400).json({
         error: "Message is too long.",
       });
     }
 
-    console.log("Gemini request received.");
 
-    const reply = await callGeminiWithRetry(message.trim());
+    const userMessage = message.trim();
+
+    console.log("Chat request received:", userMessage);
+
+
+/*
+ * First check whether we can answer locally.
+ * This avoids a Gemini API request for common
+ * portfolio questions.
+ */
+    const localAnswer = getLocalAnswer(userMessage);
+
+    if (localAnswer) {
+      console.log("Local answer found. Skipping Gemini.");
+
+      return res.status(200).json({
+        reply: localAnswer,
+      });
+    }
+
+
+    /*
+    * No local answer was found.
+    * Use Gemini for more complex questions.
+    */
+    console.log("No local answer found. Using Gemini.");
+
+    const reply = await callGeminiWithRetry(userMessage);
 
     console.log("Gemini response received successfully.");
 
@@ -389,26 +321,61 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error("Gemini API error:", error);
 
-    const errorMessage = String(
-      error?.message || ""
-    ).toLowerCase();
+    console.error(
+      "Gemini API error:",
+      error
+    );
 
-    // Don't expose Gemini/API internals to the browser.
-    if (
-      errorMessage.includes("api key") ||
-      errorMessage.includes("authentication") ||
-      errorMessage.includes("unauthorized") ||
-      errorMessage.includes("permission")
-    ) {
-      return res.status(500).json({
-        error: "AI service authentication failed.",
+
+    const errorMessage =
+      String(error?.message || "").toLowerCase();
+
+
+    /*
+     * Handle quota errors explicitly.
+     */
+    const isQuotaError =
+      errorMessage.includes("quota") ||
+      errorMessage.includes("resource_exhausted") ||
+      errorMessage.includes("rate limit") ||
+      errorMessage.includes("429");
+
+
+    if (isQuotaError) {
+
+      return res.status(429).json({
+        error:
+          "The AI service has reached its current free-tier limit. Please try again later.",
       });
     }
 
+
+    /*
+     * Handle authentication errors.
+     */
+    const isAuthenticationError =
+      errorMessage.includes("api key") ||
+      errorMessage.includes("authentication") ||
+      errorMessage.includes("unauthorized") ||
+      errorMessage.includes("permission");
+
+
+    if (isAuthenticationError) {
+
+      return res.status(500).json({
+        error:
+          "AI service authentication failed.",
+      });
+    }
+
+
+    /*
+     * Generic temporary failure.
+     */
     return res.status(502).json({
-      error: "AI service is temporarily unavailable. Please try again.",
+      error:
+        "AI service is temporarily unavailable. Please try again.",
     });
   }
 }
